@@ -1,10 +1,10 @@
 # CommandTraverse
 
+**English** | [中文版](https://github.com/zhangtianli2006/CommandTraverse/blob/master/README_cn.md)
+
 An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin that allows non-op players to use specific commands, and supports carpet.
 
 ![License](https://img.shields.io/github/license/zhangtianli2006/CommandTraverse?label=License&style=flat-square) ![Last Commit](https://img.shields.io/github/last-commit/zhangtianli2006/CommandTraverse?label=Last%20Commit&style=flat-square)
-
-
 
 ## Installation
 
@@ -43,7 +43,7 @@ This plugin is still under development, there are these bugs remaining:
 
 In `config/cmd_tvs.json`, the number is the minimum permission required for the command before it, change them according to your needs.
 
-Add your own commands in `"others"`.
+The numbers represent the permissions like the table below.
 
 | permission names in MCDR | numbers for them |
 |:------------------------:|:----------------:|
@@ -52,6 +52,8 @@ Add your own commands in `"others"`.
 |           helper         |         2        |
 |           admin          |         3        |
 |           owner          |         4        |
+
+Add your own commands in `"others"`.
 
 ```json
 {
