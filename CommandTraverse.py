@@ -106,7 +106,8 @@ DEFAULT_CONFIG = {
             'carpet': 3,
             'draw': 3,
             'tick': 3
-        }
+        },
+        'others': {}
     }
 }
 
@@ -156,14 +157,15 @@ config = Config(CONFIG_PATH)
 
 def on_load(server: ServerInterface, old):
     server.register_help_message(
-        '!!<command>', 'Run command using MCDR permissions')
+        '!!cmd <command>', 'Run commands using MCDR permissions')
     config.load(server)
 
 
 def on_user_info(server: ServerInterface, info: Info):
     if info.content.startswith('!!cmd') and info.player != None:
         if info.content == '!!cmd':
-            info.get_command_source().reply('!!<command> Run commands using MCDR permissions')
+            info.get_command_source().reply(
+                '!!cmd <command> Run commands using MCDR permissions')
 
         no_marker = info.content.lstrip('!!cmd').lstrip()
         cmd_header = no_marker.split(' ')[0]
@@ -173,6 +175,10 @@ def on_user_info(server: ServerInterface, info: Info):
         if permission_req == -1:
             permission_req = config.data['permissions']['carpet'].get(
                 cmd_header, -1)
+        if permission_req == -1:
+            permission_req = config.data['permissions']['others'].get(
+                cmd_header, -1)
+
         if permission_req == -1:
             info.get_command_source().reply(
                 RText('Unknown command, input §7!!cmd§r for more information'))
