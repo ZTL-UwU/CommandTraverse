@@ -114,14 +114,6 @@ DEFAULT_CONFIG = {
 }
 
 
-def print_message(source: CommandSource, msg, tell=True, prefix="[CMD] "):
-    msg = prefix + msg
-    if source.is_player and not tell:
-        source.get_server().say(msg)
-    else:
-        source.reply(msg)
-
-
 class Config:
     def __init__(self, file_path: str):
         self.file_path = file_path
