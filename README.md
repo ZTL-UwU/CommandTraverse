@@ -2,7 +2,7 @@
 
 **English** | [中文版](https://github.com/zhangtianli2006/CommandTraverse/blob/master/README_cn.md)
 
-An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin to customize command permissions, supports carpet.
+An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin to customize command permissions, supports Carpet mod.
 
 ![License](https://img.shields.io/github/license/zhangtianli2006/CommandTraverse?label=License&style=flat-square) ![Last Commit](https://img.shields.io/github/last-commit/zhangtianli2006/CommandTraverse?label=Last%20Commit&style=flat-square)
 
