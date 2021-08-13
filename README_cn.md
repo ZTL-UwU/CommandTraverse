@@ -17,13 +17,17 @@
 
 `!!cmd <command>` 以配置的权限运行指令。
 
+`!!cmd check_per <command>` 查看运行一条指令的最低权限要求.
+
+`!!cmd check_my_per` 查看玩家自身的权限（仅玩家可用）.
+
 **例子**
 
 `!!cmd tp @a @s`
 
 `!!cmd gamemode spectator @s`
 
-`!!cmd summon minecraft:zombie`
+`!!cmd check_per summon`
 
 如果玩家的权限不够，会返回  `No permission`。
 

@@ -18,13 +18,17 @@ An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin to customize comm
 
 `!!cmd <command>` Run command using MCDR permission.
 
+`!!cmd check_per <command>` Check the permission requirement of a command.
+
+`!!cmd check_my_per` Check my permission level (player-only).
+
 **Example**
 
 `!!cmd tp @a @s`
 
 `!!cmd gamemode spectator @s`
 
-`!!cmd summon minecraft:zombie`
+`!!cmd check_per summon`
 
 If a player doesn't reach the permission requirement, `No permission` will be returned.
 
