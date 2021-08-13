@@ -21,7 +21,7 @@
 
 `!!cmd check_my_per` 查看玩家自身的权限（仅玩家可用）。
 
-`!!cmd run_as <player> <command>` 简化 `/execute as <player> at <player> run <command>` （需要玩家拥有 `execute` 权限）。
+`!!cmd run_as <player> <command>` 简化 `/execute as <player> at <player> run <command>` （需要玩家拥有 `/execute` 权限）。
 
 **例子**
 

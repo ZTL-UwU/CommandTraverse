@@ -22,7 +22,7 @@ An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin to customize comm
 
 `!!cmd check_my_per` Check my permission level (player-only).
 
-`!!cmd run_as <player> <command>` Short for `/execute as <player> at <player> run <command>` (requires `execute` permission).
+`!!cmd run_as <player> <command>` Short for `/execute as <player> at <player> run <command>` (requires `/execute` permission).
 
 **Example**
 
