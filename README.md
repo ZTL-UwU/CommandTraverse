@@ -15,12 +15,15 @@ An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin that allows non-o
 ## Player Usage
 
 `!!cmd` Show help message.
+
 `!!cmd <command>` Run command using MCDR permission.
 
 **Example**
 
 `!!cmd tp @a @s`
+
 `!!cmd gamemode spectator @s`
+
 `!!cmd summon minecraft:zombie`
 
 If a player doesn't reach the permission requirement, `No permission` will be returned.
