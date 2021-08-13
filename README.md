@@ -64,12 +64,13 @@ Add your own commands in `"others"`.
         },
         "carpet": {
             "log": 0,
+            ...
             "info": 1,
             ...
             "carpet": 3
         },
         "others": {
-            "your_own_command": <your own level setting>
+            "your_own_command": <your_own_level_setting>
         }
     }
 }
