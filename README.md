@@ -40,6 +40,8 @@ This plugin is still under development, there are these bugs remaining:
 
 In `config/cmd_tvs.json`, the number is the minimum permission required for the command before it, change them according to your needs.
 
+Add your own commands in `"others"`.
+
 | permission names in MCDR | numbers for them |
 |:------------------------:|:----------------:|
 |           guest          |         0        |
