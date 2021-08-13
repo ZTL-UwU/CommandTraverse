@@ -22,6 +22,8 @@ An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin to customize comm
 
 `!!cmd check_my_per` Check my permission level (player-only).
 
+`!!cmd run_as <player> <command>` Short for `/execute as <player> at <player> run <command>` (requires `execute` permission).
+
 **Example**
 
 `!!cmd tp @a @s`
@@ -29,6 +31,10 @@ An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin to customize comm
 `!!cmd gamemode spectator @s`
 
 `!!cmd check_per summon`
+
+`!!cmd check_my_per`
+
+`!!cmd run_as steve tp alex @s`
 
 If a player doesn't reach the permission requirement, `No permission` will be returned.
 

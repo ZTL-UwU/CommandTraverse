@@ -176,9 +176,10 @@ def on_user_info(server: ServerInterface, info: Info):
         info.cancel_send_to_server()
         if info.content == "!!cmd":
             info.get_command_source().reply(
-                "!!cmd <command>           : Run commands using MCDR permissions\n"
-                + "!!cmd check_per <command> : Check the permission requirement of a command\n"
-                + "!!cmd check_my_per        : Check my permission level"
+                "!!cmd <command>                 : Run commands using MCDR permissions\n"
+                + "!!cmd check_per <command>       : Check the permission requirement of a command\n"
+                + "!!cmd check_my_per              : Check my permission level"
+                + "!!cmd run_as <player> <command> : Run commands using MCDR permissions (requires 'execute' permission)\n"
             )
         else:
             no_marker = info.content.lstrip("!!cmd").lstrip()
@@ -188,7 +189,9 @@ def on_user_info(server: ServerInterface, info: Info):
                 cmd_header = no_marker.split(" ")[1]
                 permission_req = __check_permission_req(cmd_header)
                 if permission_req == -1:
-                    info.get_command_source().reply("Unknown command")
+                    info.get_command_source().reply(
+                        "Unknown command '" + cmd_header + "'"
+                    )
                 else:
                     can_cannot = "CANNOT"
                     if info.get_command_source().has_permission(permission_req):
@@ -207,6 +210,33 @@ def on_user_info(server: ServerInterface, info: Info):
                         + can_cannot
                         + " run this command"
                     )
+            elif cmd_header == "run_as":
+                if not info.get_command_source().has_permission(
+                    __check_permission_req("execute")
+                ):
+                    info.get_command_source().reply("No permission")
+                    return
+
+                no_marker = no_marker.lstrip("run_as").lstrip()
+                if not len(no_marker) > 0:
+                    server.reply(info, 'Lack <player>, type "!!cmd" for help')
+                    return
+
+                player = no_marker.split(" ")[0]
+                command = no_marker.lstrip(player).lstrip()
+                if not len(command) > 0:
+                    server.reply(info, 'Lack <command>, type "!!cmd" for help')
+                    return
+
+                cmd_header = command.split(" ")[0]
+                permission_req = __check_permission_req(cmd_header)
+                if permission_req == -1:
+                    server.reply(info, "Unknown command '" + cmd_header + "'")
+                    return
+
+                server.execute(
+                    "execute as " + player + " at " + player + " run " + command
+                )
             elif cmd_header == "check_my_per":
                 info.get_command_source().reply(
                     "\nYour permission level is: '"
@@ -216,7 +246,9 @@ def on_user_info(server: ServerInterface, info: Info):
             else:
                 permission_req = __check_permission_req(cmd_header)
                 if permission_req == -1:
-                    info.get_command_source().reply("Unknown command")
+                    info.get_command_source().reply(
+                        "Unknown command '" + cmd_header + "'"
+                    )
                 elif info.get_command_source().has_permission(permission_req):
                     server.execute(
                         "execute as "
@@ -239,17 +271,39 @@ def on_info(server: ServerInterface, info: Info):
             if info.content == "!!cmd":
                 server.reply(
                     info,
-                    "!!cmd check_per <command> : Check the permission requirement of a command",
+                    "!!cmd run_as <player> <command>  : Run a command as a player\n"
+                    + "!!cmd check_per <command>        : Check the permission requirement of a command",
                 )
             else:
                 no_marker = info.content.lstrip("!!cmd").lstrip()
                 cmd_header = no_marker.split(" ")[0]
 
-                if cmd_header == "check_per" and cmd_header != no_marker:
+                if cmd_header == "run_as":
+                    no_marker = no_marker.lstrip("run_as").lstrip()
+                    if not len(no_marker) > 0:
+                        server.reply(info, 'Lack <player>, type "!!cmd" for help')
+                        return
+
+                    player = no_marker.split(" ")[0]
+                    command = no_marker.lstrip(player).lstrip()
+                    if not len(command) > 0:
+                        server.reply(info, 'Lack <command>, type "!!cmd" for help')
+                        return
+
+                    cmd_header = command.split(" ")[0]
+                    permission_req = __check_permission_req(cmd_header)
+                    if permission_req == -1:
+                        server.reply(info, "Unknown command '" + cmd_header + "'")
+                        return
+
+                    server.execute(
+                        "execute as " + player + " at " + player + " run " + command
+                    )
+                elif cmd_header == "check_per" and cmd_header != no_marker:
                     cmd_header = no_marker.split(" ")[1]
                     permission_req = __check_permission_req(cmd_header)
                     if permission_req == -1:
-                        server.reply(info, "Unknown command")
+                        server.reply(info, "Unknown command '" + cmd_header + "'")
                     else:
                         server.reply(
                             info,
@@ -260,4 +314,7 @@ def on_info(server: ServerInterface, info: Info):
                             + "'",
                         )
                 else:
-                    server.reply(info, 'Unknown command, type "!!cmd" for help')
+                    server.reply(
+                        info,
+                        "Unknown command '" + cmd_header + '\', type "!!cmd" for help',
+                    )
