@@ -168,13 +168,13 @@ def on_user_info(server: ServerInterface, info: Info):
         info.cancel_send_to_server()
         if info.content == "!!cmd":
             info.get_command_source().reply(
-                "!!cmd <command>                 : Run commands using MCDR permissions\n"
-                + "!!cmd check_per <command>       : Check the permission requirement of a command\n"
-                + "!!cmd check_my_per              : Check my permission level"
+                "!!cmd <command> : Run commands using MCDR permissions\n"
+                + "!!cmd check_per <command> : Check the permission requirement of a command\n"
+                + "!!cmd check_my_per : Check my permission level\n"
                 + "!!cmd run_as <player> <command> : Run commands using MCDR permissions (requires 'execute' permission)\n"
             )
         else:
-            no_marker = info.content.lstrip("!!cmd").lstrip()
+            no_marker = info.content.lstrip("!!cmd").strip()
             cmd_header = no_marker.split(" ")[0]
 
             if cmd_header == "check_per":
@@ -209,13 +209,13 @@ def on_user_info(server: ServerInterface, info: Info):
                     info.get_command_source().reply("No permission")
                     return
 
-                no_marker = no_marker.lstrip("run_as").lstrip()
+                no_marker = no_marker.lstrip("run_as").strip()
                 if not len(no_marker) > 0:
                     server.reply(info, 'Lack <player>, type "!!cmd" for help')
                     return
 
                 player = no_marker.split(" ")[0]
-                command = no_marker.lstrip(player).lstrip()
+                command = no_marker.lstrip(player).strip()
                 if not len(command) > 0:
                     server.reply(info, 'Lack <command>, type "!!cmd" for help')
                     return
@@ -263,21 +263,21 @@ def on_info(server: ServerInterface, info: Info):
             if info.content == "!!cmd":
                 server.reply(
                     info,
-                    "!!cmd run_as <player> <command>  : Run a command as a player\n"
-                    + "!!cmd check_per <command>        : Check the permission requirement of a command",
+                    "!!cmd run_as <player> <command> : Run a command as a player\n"
+                    + "!!cmd check_per <command>       : Check the permission requirement of a command",
                 )
             else:
-                no_marker = info.content.lstrip("!!cmd").lstrip()
+                no_marker = info.content.lstrip("!!cmd").strip()
                 cmd_header = no_marker.split(" ")[0]
 
                 if cmd_header == "run_as":
-                    no_marker = no_marker.lstrip("run_as").lstrip()
+                    no_marker = no_marker.lstrip("run_as").strip()
                     if not len(no_marker) > 0:
                         server.reply(info, 'Lack <player>, type "!!cmd" for help')
                         return
 
                     player = no_marker.split(" ")[0]
-                    command = no_marker.lstrip(player).lstrip()
+                    command = no_marker.lstrip(player).strip()
                     if not len(command) > 0:
                         server.reply(info, 'Lack <command>, type "!!cmd" for help')
                         return
