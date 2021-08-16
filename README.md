@@ -18,11 +18,13 @@ An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin to customize comm
 
 `!!cmd <command>` Run command using MCDR permission.
 
-`!!cmd check_per <command>` Check the permission requirement of a command.
+`!!cmd check_per <command_name>` Check the permission requirement of a command.
 
 `!!cmd check_my_per` Check my permission level (player-only).
 
 `!!cmd run_as <player> <command>` Short for `/execute as <player> at <player> run <command>` (requires `/execute` permission).
+
+`!!cmd set_per <command_name> <permission>` Set the permission requirement for a command (requires `owner` permission) (`<permission>` can be both name and number).
 
 **Example**
 
@@ -35,6 +37,8 @@ An [MCDR](https://github.com/Fallen-Breath/MCDReforged) plugin to customize comm
 `!!cmd check_my_per`
 
 `!!cmd run_as steve tp alex @s`
+
+`!!cmd set_per player admin` or `!!cmd set_per player 3`
 
 If a player doesn't reach the permission requirement, `No permission` will be returned.
 

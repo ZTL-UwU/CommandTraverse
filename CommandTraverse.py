@@ -169,89 +169,133 @@ def on_user_info(server: ServerInterface, info: Info):
         if info.content == "!!cmd":
             info.get_command_source().reply(
                 "!!cmd <command> : Run commands using MCDR permissions\n"
-                + "!!cmd check_per <command> : Check the permission requirement of a command\n"
+                + "!!cmd check_per <command_name> : Check the permission requirement of a command\n"
                 + "!!cmd check_my_per : Check my permission level\n"
                 + "!!cmd run_as <player> <command> : Run commands using MCDR permissions (requires 'execute' permission)\n"
+                + "!!cmd set_per <command_name> <permission> : Set the permission for a command"
             )
-        else:
-            no_marker = info.content.lstrip("!!cmd").strip()
-            cmd_header = no_marker.split(" ")[0].strip()
+            return
 
-            if cmd_header == "check_per":
-                cmd_header = no_marker.split(" ")[1].strip()
-                permission_req = __check_permission_req(cmd_header)
-                if permission_req == -1:
-                    info.get_command_source().reply(
-                        "Unknown command '" + cmd_header + "'"
-                    )
-                else:
-                    can_cannot = "CANNOT"
-                    if info.get_command_source().has_permission(permission_req):
-                        can_cannot = "CAN"
+        no_marker = info.content.lstrip("!!cmd").strip()
+        cmd_header = no_marker.split(" ")[0].strip()
 
-                    info.get_command_source().reply(
-                        "The permission requirement for '"
-                        + cmd_header
-                        + "' is: '"
-                        + PERMISSION_TABLE[permission_req]
-                        + "'\nYour permission level is: '"
-                        + PERMISSION_TABLE[
-                            info.get_command_source().get_permission_level()
-                        ]
-                        + "'\nYou "
-                        + can_cannot
-                        + " run this command"
-                    )
-            elif cmd_header == "run_as":
-                if not info.get_command_source().has_permission(
-                    __check_permission_req("execute")
-                ):
-                    info.get_command_source().reply("No permission")
-                    return
+        if cmd_header == "check_per":
+            cmd_header = no_marker.split(" ")[1].strip()
+            permission_req = __check_permission_req(cmd_header)
+            if permission_req == -1:
+                info.get_command_source().reply("Unknown command '" + cmd_header + "'")
+            else:
+                can_cannot = "CANNOT"
+                if info.get_command_source().has_permission(permission_req):
+                    can_cannot = "CAN"
 
-                no_marker = no_marker.lstrip("run_as").strip()
-                if not len(no_marker) > 0:
-                    server.reply(info, 'Lack <player>, type "!!cmd" for help')
-                    return
-
-                player = no_marker.split(" ")[0].strip()
-                command = no_marker.lstrip(player).strip()
-                if not len(command) > 0:
-                    server.reply(info, 'Lack <command>, type "!!cmd" for help')
-                    return
-
-                cmd_header = command.split(" ")[0].strip()
-                permission_req = __check_permission_req(cmd_header)
-                if permission_req == -1:
-                    server.reply(info, "Unknown command '" + cmd_header + "'")
-                    return
-
-                server.execute(
-                    "execute as " + player + " at " + player + " run " + command
-                )
-            elif cmd_header == "check_my_per":
                 info.get_command_source().reply(
-                    "\nYour permission level is: '"
+                    "The permission requirement for '"
+                    + cmd_header
+                    + "' is: '"
+                    + PERMISSION_TABLE[permission_req]
+                    + "'\nYour permission level is: '"
                     + PERMISSION_TABLE[info.get_command_source().get_permission_level()]
-                    + "'"
+                    + "'\nYou "
+                    + can_cannot
+                    + " run this command"
+                )
+        elif cmd_header == "run_as":
+            if not info.get_command_source().has_permission(
+                __check_permission_req("execute")
+            ):
+                info.get_command_source().reply("No permission")
+                return
+
+            no_marker = no_marker.lstrip("run_as").strip()
+            if not len(no_marker) > 0:
+                server.reply(info, 'Lack <player>, type "!!cmd" for help')
+                return
+
+            player = no_marker.split(" ")[0].strip()
+            command = no_marker.lstrip(player).strip()
+            if not len(command) > 0:
+                server.reply(info, 'Lack <command>, type "!!cmd" for help')
+                return
+
+            cmd_header = command.split(" ")[0].strip()
+            permission_req = __check_permission_req(cmd_header)
+            if permission_req == -1:
+                server.reply(info, "Unknown command '" + cmd_header + "'")
+                return
+
+            server.execute("execute as " + player + " at " + player + " run " + command)
+        elif cmd_header == "check_my_per":
+            info.get_command_source().reply(
+                "\nYour permission level is: '"
+                + PERMISSION_TABLE[info.get_command_source().get_permission_level()]
+                + "'"
+            )
+        elif cmd_header == "set_per":
+            if not info.get_command_source().get_permission_level() < 4:
+                info.get_command_source().reply("No permission")
+                return
+
+            no_marker = no_marker.lstrip("set_per").strip()
+            if not len(no_marker) > 0:
+                server.reply(info, 'Lack <command_name>, type "!!cmd" for help')
+                return
+
+            command_name = no_marker.split(" ")[0].strip()
+            new_permission = no_marker.split(" ")[1].strip()
+
+            if new_permission == "guest" or new_permission == "0":
+                new_permission = 0
+            elif new_permission == "user" or new_permission == "1":
+                new_permission = 1
+            elif new_permission == "helper" or new_permission == "2":
+                new_permission = 2
+            elif new_permission == "admin" or new_permission == "3":
+                new_permission = 3
+            elif new_permission == "owner" or new_permission == "4":
+                new_permission = 4
+            else:
+                server.reply(
+                    info,
+                    "Unknown permission level '" + new_permission + "'",
+                )
+                return
+
+            permission_req = config.data["permissions"]["vanilla"].get(command_name, -1)
+            command_source = "vanilla"
+            if permission_req == -1:
+                permission_req = config.data["permissions"]["carpet"].get(
+                    command_name, -1
+                )
+                command_source = "carpet"
+            if permission_req == -1:
+                permission_req = config.data["permissions"]["others"].get(
+                    command_name, -1
+                )
+                command_source = "others"
+
+            if permission_req == -1:
+                server.reply(info, "Unknown command '" + command_name + "'")
+                return
+
+            config.data["permissions"][command_source] = new_permission
+            config.write_config()
+
+        else:
+            permission_req = __check_permission_req(cmd_header)
+            if permission_req == -1:
+                info.get_command_source().reply("Unknown command '" + cmd_header + "'")
+            elif info.get_command_source().has_permission(permission_req):
+                server.execute(
+                    "execute as "
+                    + info.player
+                    + " at "
+                    + info.player
+                    + " run "
+                    + no_marker
                 )
             else:
-                permission_req = __check_permission_req(cmd_header)
-                if permission_req == -1:
-                    info.get_command_source().reply(
-                        "Unknown command '" + cmd_header + "'"
-                    )
-                elif info.get_command_source().has_permission(permission_req):
-                    server.execute(
-                        "execute as "
-                        + info.player
-                        + " at "
-                        + info.player
-                        + " run "
-                        + no_marker
-                    )
-                else:
-                    info.get_command_source().reply("No permission")
+                info.get_command_source().reply("No permission")
 
 
 def on_info(server: ServerInterface, info: Info):
@@ -264,7 +308,8 @@ def on_info(server: ServerInterface, info: Info):
                 server.reply(
                     info,
                     "!!cmd run_as <player> <command> : Run a command as a player\n"
-                    + "!!cmd check_per <command>       : Check the permission requirement of a command",
+                    + "!!cmd check_per <command_name> : Check the permission requirement of a command\n"
+                    + "!!cmd set_per <command_name> <permission> : Set the permission for a command",
                 )
             else:
                 no_marker = info.content.lstrip("!!cmd").strip()
@@ -305,6 +350,53 @@ def on_info(server: ServerInterface, info: Info):
                             + PERMISSION_TABLE[permission_req]
                             + "'",
                         )
+                elif cmd_header == "set_per":
+                    no_marker = no_marker.lstrip("set_per").strip()
+                    if not len(no_marker) > 0:
+                        server.reply(info, 'Lack <command_name>, type "!!cmd" for help')
+                        return
+
+                    command_name = no_marker.split(" ")[0].strip()
+                    new_permission = no_marker.split(" ")[1].strip()
+
+                    if new_permission == "guest" or new_permission == "0":
+                        new_permission = 0
+                    elif new_permission == "user" or new_permission == "1":
+                        new_permission = 1
+                    elif new_permission == "helper" or new_permission == "2":
+                        new_permission = 2
+                    elif new_permission == "admin" or new_permission == "3":
+                        new_permission = 3
+                    elif new_permission == "owner" or new_permission == "4":
+                        new_permission = 4
+                    else:
+                        server.reply(
+                            info,
+                            "Unknown permission level '" + new_permission + "'",
+                        )
+                        return
+
+                    permission_req = config.data["permissions"]["vanilla"].get(
+                        command_name, -1
+                    )
+                    command_source = "vanilla"
+                    if permission_req == -1:
+                        permission_req = config.data["permissions"]["carpet"].get(
+                            command_name, -1
+                        )
+                        command_source = "carpet"
+                    if permission_req == -1:
+                        permission_req = config.data["permissions"]["others"].get(
+                            command_name, -1
+                        )
+                        command_source = "others"
+
+                    if permission_req == -1:
+                        server.reply(info, "Unknown command '" + command_name + "'")
+                        return
+
+                    config.data["permissions"][command_source][command_name] = new_permission
+                    config.write_config()
                 else:
                     server.reply(
                         info,

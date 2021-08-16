@@ -17,11 +17,13 @@
 
 `!!cmd <command>` 以配置的权限运行指令。
 
-`!!cmd check_per <command>` 查看运行一条指令的最低权限要求。
+`!!cmd check_per <command_name>` 查看运行某指令的最低权限要求。
 
 `!!cmd check_my_per` 查看玩家自身的权限（仅玩家可用）。
 
 `!!cmd run_as <player> <command>` 简化 `/execute as <player> at <player> run <command>` （需要玩家拥有 `/execute` 权限）。
+
+`!!cmd set_per <command_name> <permission>` 设置某指令的最低权限需求 （需要玩家拥有 `owner` 权限） （`<permission>` 可以为英文名称或数字）。
 
 **例子**
 
@@ -34,6 +36,8 @@
 `!!cmd check_my_per`
 
 `!!cmd run_as steve tp alex @s`
+
+`!!cmd set_per player admin` 或 `!!cmd set_per player 3`
 
 如果玩家的权限不够，会返回  `No permission`。
 
