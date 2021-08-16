@@ -175,10 +175,10 @@ def on_user_info(server: ServerInterface, info: Info):
             )
         else:
             no_marker = info.content.lstrip("!!cmd").strip()
-            cmd_header = no_marker.split(" ")[0]
+            cmd_header = no_marker.split(" ")[0].strip()
 
             if cmd_header == "check_per":
-                cmd_header = no_marker.split(" ")[1]
+                cmd_header = no_marker.split(" ")[1].strip()
                 permission_req = __check_permission_req(cmd_header)
                 if permission_req == -1:
                     info.get_command_source().reply(
@@ -214,13 +214,13 @@ def on_user_info(server: ServerInterface, info: Info):
                     server.reply(info, 'Lack <player>, type "!!cmd" for help')
                     return
 
-                player = no_marker.split(" ")[0]
+                player = no_marker.split(" ")[0].strip()
                 command = no_marker.lstrip(player).strip()
                 if not len(command) > 0:
                     server.reply(info, 'Lack <command>, type "!!cmd" for help')
                     return
 
-                cmd_header = command.split(" ")[0]
+                cmd_header = command.split(" ")[0].strip()
                 permission_req = __check_permission_req(cmd_header)
                 if permission_req == -1:
                     server.reply(info, "Unknown command '" + cmd_header + "'")
@@ -268,7 +268,7 @@ def on_info(server: ServerInterface, info: Info):
                 )
             else:
                 no_marker = info.content.lstrip("!!cmd").strip()
-                cmd_header = no_marker.split(" ")[0]
+                cmd_header = no_marker.split(" ")[0].strip()
 
                 if cmd_header == "run_as":
                     no_marker = no_marker.lstrip("run_as").strip()
@@ -276,13 +276,13 @@ def on_info(server: ServerInterface, info: Info):
                         server.reply(info, 'Lack <player>, type "!!cmd" for help')
                         return
 
-                    player = no_marker.split(" ")[0]
+                    player = no_marker.split(" ")[0].strip()
                     command = no_marker.lstrip(player).strip()
                     if not len(command) > 0:
                         server.reply(info, 'Lack <command>, type "!!cmd" for help')
                         return
 
-                    cmd_header = command.split(" ")[0]
+                    cmd_header = command.split(" ")[0].strip()
                     permission_req = __check_permission_req(cmd_header)
                     if permission_req == -1:
                         server.reply(info, "Unknown command '" + cmd_header + "'")
@@ -292,7 +292,7 @@ def on_info(server: ServerInterface, info: Info):
                         "execute as " + player + " at " + player + " run " + command
                     )
                 elif cmd_header == "check_per" and cmd_header != no_marker:
-                    cmd_header = no_marker.split(" ")[1]
+                    cmd_header = no_marker.split(" ")[1].strip()
                     permission_req = __check_permission_req(cmd_header)
                     if permission_req == -1:
                         server.reply(info, "Unknown command '" + cmd_header + "'")
