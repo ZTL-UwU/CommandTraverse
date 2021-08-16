@@ -5,7 +5,7 @@ from mcdreforged.api.all import *
 
 PLUGIN_METADATA = {
     "id": "cmd_tvs",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "name": "CommandTraverse",
     "author": [
         "zhangtianli2006",
